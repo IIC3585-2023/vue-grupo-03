@@ -12,8 +12,15 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@tanstack/vue-query": "^4.29.11",
+    "axios": "^1.4.0",
+    "lodash": "^4.17.21",
     "pinia": "^2.0.36",
     "vue": "^3.3.2",
+    "vue-animated-counter": "^0.0.5",
+    "vue-circular-count-down-timer": "^2.0.0",
+    "vue-confetti": "^2.3.0",
+    "vue-confetti-explosion": "^1.0.2",
     "vue-router": "^4.2.0"
   },
   "devDependencies": {
