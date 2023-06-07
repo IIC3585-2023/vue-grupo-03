@@ -29,10 +29,12 @@ const {
 })
 
 const currentQuestion = ref<QuestionType | undefined>(data.value?.[0]);
+  const totalQuestions = ref<number>(data.value?.length as number);
 
 watch(isSuccessQuestions, (newValue) => {
   if (newValue) {
     currentQuestion.value = data.value?.[0];
+    totalQuestions.value = data.value?.length as number;
   }
 })
 
@@ -95,7 +97,7 @@ onMounted(() => {
 <template>
   <div class="bg-indigo-50 h-full py-10 px-10 flex justify-center">
     <div class="flex flex-col align-middle items-center max-w-2xl gap-y-3">
-      <GameQuestionStatus :currentQuestionIndex="currentQuestionIndex" />
+      <GameQuestionStatus :currentQuestionIndex="currentQuestionIndex" :totalQuestions="totalQuestions" />
       <div v-if="isLoadingQuestions" class="w-full flex py-10 justify-center">
         <span class="animate-spin w-10 h-10 block pointer-events-none text-gray-500">
           <IconLoading />

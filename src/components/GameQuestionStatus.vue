@@ -1,11 +1,10 @@
 <script setup lang="ts">
 interface Props {
   currentQuestionIndex: number;
+  totalQuestions: number;
 }
 
 const props = defineProps<Props>();
-
-const numberAllQuestions = 10;
 
 function checkQuestionPassed(index: number) {
   return index <= props.currentQuestionIndex;
@@ -15,7 +14,7 @@ function checkQuestionPassed(index: number) {
 <template>
   <div class="flex mx-auto">
     <div
-      v-for="index in numberAllQuestions"
+      v-for="index in totalQuestions"
       :key="index"
       class="mb-4 flex items-center lg:mb-6"
     >
@@ -37,7 +36,7 @@ function checkQuestionPassed(index: number) {
         </span>
       </div>
       <div
-        v-if = "index < numberAllQuestions"
+        v-if = "index < totalQuestions"
         class="w-4 h-1 rounded-full"
         :class="{
           'bg-indigo-600': checkQuestionPassed(index),

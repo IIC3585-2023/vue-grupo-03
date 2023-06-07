@@ -56,8 +56,5 @@ const onClick = async (answer: ImageAnswer | string) => {
         </button>
       </div>
     </div>
-    <p class="text-white">
-      {{  question.correctAnswer }}
-    </p>
   </section>
 </template>
