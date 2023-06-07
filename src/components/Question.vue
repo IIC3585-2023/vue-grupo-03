@@ -13,7 +13,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const emit = defineEmits<{(e:'answerUser', value: boolean): void}>();
-const selectedAnswer = ref<ImageAnswer | string>(undefined);
+const selectedAnswer = ref<ImageAnswer | string | undefined>(undefined);
 const isCorrect = computed(() => props.question?.correctAnswer === selectedAnswer.value);
 const shuffleAlternatives = computed(() => _.shuffle([...props.question?.incorrectAnswers || [], props.question?.correctAnswer]));
 

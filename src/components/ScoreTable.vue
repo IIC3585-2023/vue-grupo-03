@@ -14,7 +14,7 @@ withDefaults(defineProps<Props>(), {
   <div class="px-4 sm:px-6 lg:px-8 w-96">
     <div class="sm:flex sm:items-center">
       <div class="sm:flex-auto">
-        <h1 class="text-center mx-auto font-bold leading-6 text-gray-900 text-3xl">Top 10 usuarios</h1>
+        <h1 class="text-center mx-auto font-bold leading-6 text-gray-900 text-3xl">Top 10 scores</h1>
       </div>
     </div>
     <div class="mt-8 flow-root">
@@ -24,8 +24,8 @@ withDefaults(defineProps<Props>(), {
             <thead>
               <tr>
                 <th scope="col" class="py-3 pl-3.5 pr-3 text-center text-sm font-semibold text-gray-900">Username</th>
-                <th scope="col" class="px-3 py-3.5 text-center text-sm font-semibold text-gray-900">Puntaje</th>
-                <th scope="col" class="px-3 py-3.5 text-center text-sm font-semibold text-gray-900">Fecha</th>
+                <th scope="col" class="px-3 py-3.5 text-center text-sm font-semibold text-gray-900">Score</th>
+                <th scope="col" class="px-3 py-3.5 text-center text-sm font-semibold text-gray-900">Date</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-indigo-200">

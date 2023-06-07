@@ -14,26 +14,26 @@ defineProps<Props>();
     <div v-if="show" class="modal-mask">
       <div class="modal-container px-5 py-8 sm:p-10 md:p-16 flex flex-col justify-between w-full md:w-2/5 h-3/5 items-center rounded-lg">
         <div class="flex flex-col justify-center items-center gap-2">
-          <h1 class="text-indigo-700 font-bold text-2xl sm:text-4xl">🎉 Felicidades 🎉</h1>
+          <h1 class="text-indigo-700 font-bold text-2xl sm:text-4xl">🎉 Congratulations 🎉</h1>
           <p class="text-center text-lg text-gray-700">
-            Has respondido {{ correctAnswers }} de {{ totalQuestions }} preguntas correctamente.
+            You have answered {{ correctAnswers }} out of {{ totalQuestions }} questions correctly.
           </p>
         </div>
         <div class="flex flex-col justify-center items-center gap-2">
           <p class="text-center text-2xl sm:text-3xl text-gray-900 font-bold">
-            Tu puntaje es {{ score }} puntos.
+            Your score is {{ score }} points.
           </p>
           <p class="text-center text-sm text-gray-500">
-            Revisa la sección de puntajes para ver si quedaste dentro de los 10 mejores.
+            Check the scores section to see if you are in the top 10.
           </p>
         </div>
         <div class="flex gap-3 items-center">
-          <a href="/game" class="px-5 py-2 rounded-lg bg-indigo-600 text-white text-sm sm:text-base font-medium hover:bg-indigo-700">
-            Volver a jugar!
-          </a>
-          <a href="/scores" class="px-5 py-2 rounded-lg bg-white border border-indigo-200 text-indigo-600 text-sm sm:text-base font-medium hover:bg-gray-100">
-            Ver puntajes
-          </a>
+          <router-link to="/"  class="px-5 py-2 rounded-lg bg-indigo-600 text-white text-sm sm:text-base font-medium hover:bg-indigo-700">
+            Home
+          </router-link>
+          <router-link to="/scores" class="px-5 py-2 rounded-lg bg-white border border-indigo-200 text-indigo-600 text-sm sm:text-base font-medium hover:bg-gray-100">
+            Scores
+          </router-link>
         </div>
       </div>
     </div>

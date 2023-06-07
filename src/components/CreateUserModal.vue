@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import router from '@/router';
+import { useUserStore } from '@/stores/user';
+
 interface Props {
   show: boolean;
 }
@@ -8,13 +11,13 @@ defineProps<Props>();
 
 defineEmits<{(e: 'continue', value: void): void}>();
 
-const username = ref('');
+const userStore = useUserStore();
+const usernameInput = ref('');
 
-function saveUsername() {
-  localStorage.setItem('username', username.value);
-  window.location.href = '/game';
+const saveUsername = () => {
+  userStore.setUsername(usernameInput.value);
+  router.push({ path: 'game' });
 }
-
 </script>
 
 <template>
@@ -22,8 +25,8 @@ function saveUsername() {
     <div v-if="show" class="modal-mask">
       <div class="modal-container space-y-4 px-5 sm:p-10 flex flex-col justify-between w-full md:w-1/3 h-1/3 items-center rounded-lg">
         <div class="text-center">
-          <h1 class="text-2xl font-bold text-indigo-600 mb-2">Ingresa tu nombre</h1>
-          <p class="text-indigo-500">Para poder guardar tu puntaje</p>
+          <h1 class="text-2xl font-bold text-indigo-600 mb-2">Insert your username</h1>
+          <p class="text-indigo-500">To save your score</p>
         </div>
         <input 
           type="text"
@@ -31,13 +34,13 @@ function saveUsername() {
           id="username"
           placeholder="Username"
           class="text-indigo-600 border border-gray-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
-          v-model="username"
+          v-model="usernameInput"
         >
         <button 
           class="px-5 py-2 rounded-lg bg-indigo-600 text-white text-lg font-medium hover:bg-indigo-700 disabled:opacity-50 disabled:hover:bg-indigo-600"
           @click="saveUsername"
-          :disabled="!!username"
-        >Continuar</button>
+          :disabled="!usernameInput"
+        >Play</button>
       </div>
     </div>
   </Transition>

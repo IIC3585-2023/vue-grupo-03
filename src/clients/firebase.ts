@@ -23,12 +23,18 @@ const getScores = async (): Promise<Score[]> => {
   return scores;
 };
 
-const addScore = (username: string, score: number) => {
-  const date = new Date().toISOString();
+const addScore = async (username: string, score: number): Promise<Score> => {
+  const date = new Date()
 
-  firebase.post('/', { username, score, date });
+  const year = date.getFullYear();
+  const month = ('0' + (date.getMonth() + 1)).slice(-2);
+  const day = ('0' + date.getDate()).slice(-2);
 
-  return { username, score, date };
+  const formattedDate = `${year}-${month}-${day}`;
+  console.log('inside addScore', username, score);
+  
+  await firebase.post('/', { username, score, date: formattedDate });
+  return { username, score, date: formattedDate };
 };
 
 

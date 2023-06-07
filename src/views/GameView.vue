@@ -1,30 +1,51 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, nextTick } from "vue"
-import { useQuery } from "@tanstack/vue-query"
+import { ref, onMounted, nextTick, watch } from "vue"
+import { useQuery, useMutation } from "@tanstack/vue-query"
 import triviaApi, { type Question as QuestionType } from ".././clients/trivia"
+import { addScore } from ".././clients/firebase"
 import Question from "../components/Question.vue"
 import IconLoading from "../components/icons/IconLoading.vue"
 import GameQuestionStatus from "../components/GameQuestionStatus.vue"
 import GameScore from "../components/GameScore.vue"
 import EndGameModal from "@/components/EndGameModal.vue"
 import CountDown from "@/components/CountDown.vue"
+import { useUserStore } from '@/stores/user';
 
-async function getQuestions(): Promise<QuestionType[]> {
+async function getQuestions() {
   const response = await triviaApi.getQuestions();
-  currentQuestion.value = data.value?.[0];
   return response.data;
 }
 
-const { isLoading, isSuccess, data } = useQuery<QuestionType[], Error>({
-  queryKey: ["questions"],
+const userStore = useUserStore();
+
+const { 
+  isLoading: isLoadingQuestions,
+  isSuccess: isSuccessQuestions,
+  data,
+  } = useQuery<QuestionType[], Error>({
+  queryKey: ['questions'],
   queryFn: getQuestions,
+  refetchOnMount: 'always',
 })
 
 const currentQuestion = ref<QuestionType | undefined>(data.value?.[0]);
-const currentQuestionIndex = ref<number>(0);
+
+watch(isSuccessQuestions, (newValue) => {
+  if (newValue) {
+    currentQuestion.value = data.value?.[0];
+  }
+})
+
+const {
+  mutate: mutateAddScore,
+} = useMutation({
+  mutationFn: (data: {score: number, username: string}) => addScore(data.username, data.score),
+})
+
+const currentQuestionIndex = ref<number>(1);
 const showModal = ref<boolean>(false);
+const currentScore = ref<number>(0);
 const correctAnswers = ref<number>(0);
-const currentScore = computed(() => correctAnswers.value * 1000);
 
 const timeLimitDefault: number = 20;
 const timeElapsed = ref<number>(0);
@@ -32,14 +53,21 @@ const timerInterval = ref<number|undefined>(undefined);
 const timeLimit = ref<number>(timeLimitDefault);
 
 const nextQuestion = (isCorrect: boolean) => {
-  if (isCorrect) correctAnswers.value += 1;
+  if (isCorrect) {
+    currentScore.value += 1000 * ((timeLimit.value - timeElapsed.value)/timeLimit.value);
+    correctAnswers.value++;
+  }
   currentQuestion.value = data.value?.[currentQuestionIndex.value];
   currentQuestionIndex.value++;
-  if (data.value?.length as number === currentQuestionIndex.value) {
+  if (data.value?.length as number === currentQuestionIndex.value - 1) {
+    mutateAddScore({ score: currentScore.value, username: userStore.username });
     showModal.value = true;
     clearInterval(timerInterval.value);
   }
-  else restartTimer();
+  else {
+    clearInterval(timerInterval.value);
+    restartTimer();
+  }
 }
 
 const restartTimer = async () => {
@@ -65,15 +93,15 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="bg-indigo-50 h-full py-10 flex justify-center">
+  <div class="bg-indigo-50 h-full py-10 px-10 flex justify-center">
     <div class="flex flex-col align-middle items-center max-w-2xl gap-y-3">
       <GameQuestionStatus :currentQuestionIndex="currentQuestionIndex" />
-      <div v-if="isLoading">
-        <span class="animate-spin w-4 h-4 block pointer-events-none text-gray-500">
+      <div v-if="isLoadingQuestions" class="w-full flex py-10 justify-center">
+        <span class="animate-spin w-10 h-10 block pointer-events-none text-gray-500">
           <IconLoading />
         </span>
       </div>
-      <div v-if="isSuccess" class="flex flex-col align-middle items-center gap-y-3">
+      <div v-if="isSuccessQuestions" class="flex flex-col align-middle w-full sm:w-[32rem] items-center gap-y-3">
         <CountDown :elapsed="timeElapsed" :limit="timeLimit" />
         <Question
           :question="currentQuestion"
